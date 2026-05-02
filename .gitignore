@@ -2,3 +2,12 @@
 **/__pycache__/
 .env
 *.pyc
+
+# Vector Database (Do NOT upload this)
+**/chroma_db/
+
+# Temporary files from PDF ingestion
+Backend/temp_*.pdf
+
+# Editor settings
+.vscode/

@@ -1,40 +1,46 @@
 import streamlit as st
 import requests
-import pandas as pd
 
-st.set_page_config(page_title="Causal AI Decision Support", layout="wide")
+# Set page configuration
+st.set_page_config(page_title="Causal AI - Healthcare DSS", page_icon="🏥", layout="wide")
 
-st.title("🩺 Causal AI Treatment Simulator")
-st.write("This system uses **Structural Causal Modeling** to simulate patient outcomes.")
+st.title("🏥 Simulation-Based Causal AI")
+st.markdown("---")
 
-# Sidebar for inputs
+# Sidebar for Ingestion
 with st.sidebar:
-    st.header("Simulation Settings")
-    sample_size = st.slider("Number of Patients", 100, 5000, 1000)
-    if st.button("Run Simulation"):
-        # We call your FastAPI backend here
-        response = requests.get(f"http://127.0.0.1:8000/test-data?samples={sample_size}")
-        if response.status_code == 200:
-            st.session_state['data'] = response.json()
-            st.success("Data received from Backend!")
+    st.header("1. Data Ingestion")
+    uploaded_file = st.file_uploader("Upload Medical PDF", type=["pdf"])
+    if st.button("Upload & Process"):
+        if uploaded_file:
+            with st.spinner("Processing PDF..."):
+                files = {"file": uploaded_file.getvalue()}
+                # Sending the file to the FastAPI /ingest endpoint
+                response = requests.post("http://127.0.0.1:8000/ingest", files={"file": (uploaded_file.name, uploaded_file.getvalue())})
+                if response.status_code == 200:
+                    st.success("Knowledge Base Updated!")
+                else:
+                    st.error("Upload failed.")
         else:
-            st.error("Could not connect to Backend. Is it running?")
+            st.warning("Please select a file.")
 
-# Main Dashboard
-if 'data' in st.session_state:
-    df = pd.DataFrame(st.session_state['data'])
-    
-    col1, col2 = st.columns(2)
-    
-    with col1:
-        st.subheader("Simulated Patient Data")
-        st.dataframe(df.head(10))
-        
-    with col2:
-        st.subheader("Distribution of Recovery")
-        st.bar_chart(df['Recovery'].head(50))
+# Main area for Analysis
+st.header("2. Clinical Analysis")
+query = st.text_input("Enter clinical query or patient symptoms:")
 
-    st.divider()
-    st.info("Next Step: Integrate the Causal Brain to see the 'True Effect' sliders.")
-else:
-    st.warning("Please click 'Run Simulation' in the sidebar to fetch data.")
+if st.button("Analyze"):
+    if query:
+        with st.spinner("LLM is analyzing causal factors..."):
+            # Sending the query to the FastAPI /analyze endpoint
+            # Note: We use json={"query": query} to match the Body(embed=True) in main.py
+            payload = {"query": query}
+            response = requests.post("http://127.0.0.1:8000/analyze", json=payload)
+            
+            if response.status_code == 200:
+                result = response.json().get("analysis")
+                st.subheader("AI Decision Support Result")
+                st.info(result)
+            else:
+                st.error(f"Error: {response.text}")
+    else:
+        st.warning("Please enter a question.")
