@@ -1,0 +1,16 @@
+SECTION 1: CARDIOVASCULAR HEALTH
+Normal blood pressure is defined as <120/80 mmHg. Hypertension (Stage 1) is 130-139/80-89 mmHg. 
+Causal links: High sodium intake increases fluid retention, leading to elevated systolic pressure.
+
+SECTION 2: METABOLIC & DIABETES
+Glucose management is vital for overall metabolic health. Normal fasting glucose is <100 mg/dL. 
+A causal relationship exists between visceral adiposity and insulin resistance (Type 2 Diabetes).
+
+SECTION 3: NUTRITION & WELLNESS
+Adults require 150 minutes of moderate-intensity aerobic activity per week. 
+Nutrition: A Mediterranean-style diet is causally associated with reduced inflammation 
+and lower risk of neurodegenerative diseases.
+
+SECTION 4: RESPIRATORY & GENERAL 
+Dyspnea (shortness of breath) can be caused by cardiac or pulmonary issues. 
+Diagnostic differentiation is required to determine if the cause is heart failure or COPD.

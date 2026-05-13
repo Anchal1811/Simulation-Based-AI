@@ -1,17 +1,27 @@
+import sys
+import os
+
+# --- PERMANENT PATH FIX START ---
+# This forces the script to find the 'deps' folder you just created
+current_dir = os.path.dirname(os.path.abspath(__file__))
+deps_path = os.path.join(current_dir, 'deps')
+if deps_path not in sys.path:
+    sys.path.insert(0, deps_path)
+# --- PERMANENT PATH FIX END ---
+
 from fastapi import FastAPI, UploadFile, File, Body
 from core.rag_engine import HealthcareAI 
 from langchain_community.document_loaders import PyPDFLoader
-from langchain.text_splitter import RecursiveCharacterTextSplitter
-# Use updated Chroma import to avoid deprecation warnings
-from langchain_chroma import Chroma 
-import os
+
+from langchain_text_splitters import RecursiveCharacterTextSplitter
+# This already has its own package (langchain-chroma)
+from langchain_chroma import Chroma
 from dotenv import load_dotenv
 
 load_dotenv()
 
 app = FastAPI(title="Healthcare AI DSS")
 
-# FIX: Removed hardcoded API key fallback to satisfy GitHub security
 raw_key = os.getenv("GROQ_API_KEY")
 
 if not raw_key:
